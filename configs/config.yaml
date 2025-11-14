@@ -1,0 +1,53 @@
+DATASET:
+    CIFAR10:
+        run: true
+        dataset_loader_path: datasets\cifar-10\datasetLoader.py
+
+    CIFAR20:
+        run: false
+        dataset_loader_path: datasets\cifar-10\datasetLoader.py
+
+MODEL:
+    DenseNet121:
+        run: true
+        model_path: models\test\DenseNet.py
+        method_name: DenseNet121
+        checkpoint_path:  models\test\checkpoints\ckpt_DenseNet121.pth
+        args: 
+
+    GoogLeNet:
+        run: true
+        model_path: models\test\GoogLeNet.py
+        method_name: GoogLeNet
+        checkpoint_path: models\test\checkpoints\ckpt_GoogLeNet.pth
+        args: 
+
+    MobileNet:
+        run: true
+        model_path: models\test\MobileNet.py
+        method_name: MobileNet
+        checkpoint_path: models\test\checkpoints\ckpt_MobileNet.pth
+        args: 
+
+    ResNet:
+        run: false
+        model_path: models\test\ResNet.py
+        method_name: ResNet18
+        checkpoint_path: models\test\checkpoints\ckpt_ResNet18.pth
+        args: 
+
+    SENet:
+        run: false
+        model_path: models\test\SENet18.py
+        method_name: SENet18
+        checkpoint_path: models\test\checkpoints\ckpt_SENet18.pth
+        args: 
+
+    VGG:
+        run: false
+        model_path: models\test\VGG.py
+        method_name: VGG
+        checkpoint_path: models\test\checkpoints\ckpt_VGG19.pth
+        args: 
+            - VGG19
+

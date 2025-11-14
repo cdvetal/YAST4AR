@@ -1,0 +1,17 @@
+
+__pycache__/
+
+repo/models/test/checkpoints/*
+repo/models/test/logs/*
+repo/models/experimental/checkpoints/*
+repo/models/experimental/logs/*
+repo/models/production/checkpoints/*
+repo/models/production/logs/*
+repo/datasets/mnist/*
+repo/datasets/cifar-10/*
+!repo/datasets/*/datasetLoader.py
+outputs/
+temp/
+yast_env/
+jobs.sqlite
+db.sqlite3

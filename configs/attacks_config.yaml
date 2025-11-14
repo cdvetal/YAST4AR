@@ -1,0 +1,110 @@
+ATTACK:
+  BanditsPrior:
+    run: false
+    path: attacks\\BanditsPrior\\BanditsPrior.py
+    max_queries: 1000
+    fd_eta: 0.01
+    image_lr: 0.5
+    online_lr: 0.1
+    mode: l2
+    exploration: 0.01
+    tile_size: 50
+    epsilon: 5.0
+    nes: false
+    tiling: false
+    gradient_iters: 1
+    batch_size: 5
+
+  CornerSearch:
+    run: false
+    path: attacks\\CornerSearch\\CornerSearch.py
+    type_attack: L0+sigma
+    n_iter: 100
+    n_max: 10
+    kappa: -1
+    epsilon: -1
+    sparsity: 10
+    size_incr: 1
+    batch_size: 5
+
+  DDN:
+    run: false
+    path: attacks\\DDN\\DDN.py
+    steps: 1000
+    targeted: false
+    gamma: 0.05
+    init_norm: 1.0
+    quantize: true
+    levels: 256
+    batch_size: 5
+
+  DeepFool:
+    run: true
+    path: attacks\\DeepFool\\DeepFool.py
+    overshoot: 0.02
+    max_iter: 50
+
+  GeoDA:
+    run: false
+    path: attacks\\GeoDA\\GeoDA.py
+    dist: linf
+    tol: 0.0001
+    sigma: 0.0002
+    mu: 0.6
+    delta: 255
+    search_space: sub
+    sub_dim: 75
+    Q_max: 5000
+    batch_size: 5
+
+  LogBarrier:
+    run: false
+    path: attacks\\LogBarrier\\LogBarrier.py
+    norm: 2
+    lower_bound: 0
+    upper_bound: 1
+    dt: 0.01
+    alpha: 0.1
+    beta: 0.75
+    gamma: 0.5
+    max_outer: 15
+    tol: 1e-6
+    max_inner: 100
+    T: 500
+    batch_size: 5
+
+  SimBA:
+    run: false
+    path: attacks\\SimBA\\SimBA.py
+    freq_dims: 14
+    stride: 7
+    epsilon: 0.2
+    linf_bound: 0.0
+    order: rand
+    targeted: false
+    log_every: 1
+    num_iters: 0
+    pixel_attack: true
+    batch_size: 5
+
+  UAP:
+    run: false
+    path: attacks\\UAP\\UAP.py
+    overshoot: 0.02
+    xi: 10
+    delta: 0.2
+    max_iter_df: 10
+    max_iter_uni: 1000
+    norm: inf
+    batch_size: 5
+
+  SquareAttack:
+    run: false
+    path: attacks\\SquareAttack\\SquareAttack.py
+    eps: 5
+    n_iters: 1000
+    p_init: 0.05
+    targeted: false
+    constraint: linf
+    batch_size: 5
+ 
