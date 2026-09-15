@@ -9,21 +9,21 @@ DATASET:
 
 MODEL:
     DenseNet121:
-        run: true
+        run: false
         model_path: models\test\DenseNet.py
         method_name: DenseNet121
         checkpoint_path:  models\test\checkpoints\ckpt_DenseNet121.pth
         args: 
 
     GoogLeNet:
-        run: true
+        run: false
         model_path: models\test\GoogLeNet.py
         method_name: GoogLeNet
         checkpoint_path: models\test\checkpoints\ckpt_GoogLeNet.pth
         args: 
 
     MobileNet:
-        run: true
+        run: false
         model_path: models\test\MobileNet.py
         method_name: MobileNet
         checkpoint_path: models\test\checkpoints\ckpt_MobileNet.pth
@@ -51,3 +51,189 @@ MODEL:
         args: 
             - VGG19
 
+    BarlowTwins_Finetune_Clean:
+        run: false
+        model_path: 
+        method_name:
+        checkpoint_path: models\test\bt_100_finetune_alternative_da_torchscript.ts
+        args:
+
+    AdversarialBarlowTwins_Freeze:
+        run: false
+        model_path: 
+        method_name: 
+        checkpoint_path: models\test\adversarial_bt_100_freeze_alternative_da_torchscript.ts
+        args:
+    
+    AdversarialBarlowTwins_Finetune:
+        run: false
+        model_path: 
+        method_name: 
+        checkpoint_path: models\test\bt_100_adv_run0_20gen_torchscript.ts
+        args:
+
+    #without data augmentation
+    3SatFineTune_v1:
+        run: false
+        model_path:
+        method_name: 
+        checkpoint_path: models\test\3sat_full_adv_model_v2.pt
+        args:
+
+    #with data augmentation
+    3SatFineTune_v2:
+        run: false
+        model_path:
+        method_name: 
+        checkpoint_path: models\test\3sat_full_adv_model_v3.pt
+        args:
+
+    #without data augmentation
+    3Sat_Supervised_v1:
+        run: false
+        model_path:
+        method_name: 3Sat_Supervised
+        checkpoint_path: models\test\checkpoints\3_sat_supervised_adv_v1.pt
+        args:
+
+    #with data augmentation
+    3Sat_Supervised_v2:
+        run: false
+        model_path:
+        method_name: 3Sat_Supervised
+        checkpoint_path: models\test\checkpoints\3_sat_supervised_adv_3.pt
+        args:
+
+    ################# first experiments #################
+
+    #clean
+    3SAT_SSL_CLEAN:
+        run: #true
+        model_path:
+        method_name: 3SAT_SSL_CLEAN
+        checkpoint_path: models\test\checkpoints\3sat_ssl_clean.pt
+        args:
+    
+    3SAT_SUP_CLEAN:
+        run: false #true
+        model_path:
+        method_name: 3SAT_SUP_CLEAN
+        checkpoint_path: models\test\checkpoints\3sat_sup_clean.pt
+        args:
+
+    BarlowTwins_Clean_Finetune_Clean:
+        run: false #true
+        model_path: 
+        method_name:
+        checkpoint_path: models\test\checkpoints\run_9_torchscript.ts #models\test\bt_100_finetune_alternative_da_torchscript.ts
+        args:
+
+    #adv
+    3SAT_SSL_ADV:
+        run: false
+        model_path:
+        method_name: 3SAT_SSL_ADV
+        checkpoint_path: models\test\checkpoints\3sat_ssl_adv.pt
+        args:
+    3SAT_SUP_ADV:
+        run: false
+        model_path:
+        method_name: 3SAT_SUP_ADV
+        checkpoint_path: models\test\checkpoints\3sat_sup_adv.pt
+        args:
+
+    ################# second experiments #################
+    
+    #clean
+    3SAT_SSL_CLEAN_BACKBONE_0:
+        run: false
+        model_path:
+        method_name: 3SAT_SSL_CLEAN_BACKBONE_0
+        checkpoint_path: models\test\checkpoints\ssl_clean\ssl_backbone0_finetune_0.pt
+        args:
+    3SAT_SSL_CLEAN_BACKBONE_1:
+        run: false
+        model_path:
+        method_name: 3SAT_SSL_CLEAN_BACKBONE_1
+        checkpoint_path: models\test\checkpoints\ssl_clean\ssl_backbone0_finetune_1.pt
+        args:
+    3SAT_SSL_CLEAN_BACKBONE_2:
+        run: false
+        model_path:
+        method_name: 3SAT_SSL_CLEAN_BACKBONE_2
+        checkpoint_path: models\test\checkpoints\ssl_clean\ssl_backbone0_finetune_2.pt
+        args:
+
+    #adv
+    3SAT_SSL_ADV_BACKBONE_0:
+        run: false
+        model_path:
+        method_name: 3SAT_SSL_ADV_BACKBONE_0
+        checkpoint_path: models\test\checkpoints\ssl_adv\seed0\model_full.pt
+        args:
+    3SAT_SSL_ADV_BACKBONE_1:
+        run: false
+        model_path:
+        method_name: 3SAT_SSL_ADV_BACKBONE_1
+        checkpoint_path: models\test\checkpoints\ssl_adv\seed1\model_full.pt
+        args:
+    3SAT_SSL_ADV_BACKBONE_2:
+        run: false
+        model_path:
+        method_name: 3SAT_SSL_ADV_BACKBONE_2
+        checkpoint_path: models\test\checkpoints\ssl_adv\seed2\model_full.pt
+        args:
+    
+    3SAT_SUPERVISED_ADV_BACKBONE_0:
+        run: false
+        model_path:
+        method_name: 3SAT_SUPERVISED_ADV_BACKBONE_0
+        checkpoint_path: models\test\checkpoints\supervised_adv\seed0\model_full.pt
+        args:
+    3SAT_SUPERVISED_ADV_BACKBONE_1:
+        run: false
+        model_path:
+        method_name: 3SAT_SUPERVISED_ADV_BACKBONE_1
+        checkpoint_path: models\test\checkpoints\supervised_adv\seed1\model_full.pt
+        args:
+    3SAT_SUPERVISED_ADV_BACKBONE_2:
+        run: false
+        model_path:
+        method_name: 3SAT_SUPERVISED_ADV_BACKBONE_2
+        checkpoint_path: models\test\checkpoints\supervised_adv\seed2\model_full.pt
+        args:
+
+    
+    ########### Final experiments ###########
+    3SAT_SSL_ADV_BACKBONE_0_FT:
+        run: false #true
+        model_path:
+        method_name: 3SAT_SSL_ADV_BACKBONE_0_FT
+        checkpoint_path: models\test\checkpoints\model_full.pt
+        args:
+    3SAT_SUP_OLD_ADV_BACKBONE_0_FT:
+        run: false #true
+        model_path:
+        method_name: 3SAT_SUP_OLD_ADV_BACKBONE_0_FT
+        checkpoint_path: models\test\checkpoints\supervised_adv\old_seed0\model_full_sup.pt
+        args:
+    3SAT_SUP_ADV_BACKBONE_0_FT:
+        run: false #true
+        model_path:
+        method_name: 3SAT_SUP_ADV_BACKBONE_0_FT
+        checkpoint_path: models\test\checkpoints\supervised_adv\new_seed0\model_full_sup.pt
+        args:
+
+    EvoDENSS_test_adv:
+        run: true #true
+        model_path: 
+        method_name: EvoDENSS_test
+        checkpoint_path: models\test\checkpoints\EvoDENSS\final_run_3_torchscript.ts
+        args:
+
+    EvoDENSS_test_clean:
+        run: false #true
+        model_path: 
+        method_name: EvoDENSS_test
+        checkpoint_path: models\test\checkpoints\run_9_torchscript.ts
+        args:

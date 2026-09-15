@@ -75,9 +75,17 @@ class Pipeline:
         spec.loader.exec_module(dataset)
         testloader, trainloader = dataset.dataLoader()
 
-        images, labels = utils.get_images_labels_from_dataLoader(testloader, self.device, self.total_images)
-        normalized_images = utils.normalize_image(images, dataset.MEAN, dataset.STD)
-        original_labels = self.model(normalized_images).argmax(dim=1).cpu().detach().numpy()
+        # Keep the full dataset tensor on CPU to avoid GPU OOM on large runs.
+        images, labels = utils.get_images_labels_from_dataLoader(testloader, 'cpu', self.total_images)
+        original_labels = []
+        with torch.no_grad():
+            for i in range(0, images.size(0), self.batch_size):
+                images_batch = images[i:i + self.batch_size]
+                normalized_batch = utils.normalize_image(images_batch, dataset.MEAN, dataset.STD)
+                preds = self.model(normalized_batch.to(self.device)).argmax(dim=1).cpu()
+                original_labels.append(preds)
+
+        original_labels = torch.cat(original_labels, dim=0).detach().numpy()
         print("Dataset {} loaded successfully".format(self.dataset_name))
 
         ###########################################################################################

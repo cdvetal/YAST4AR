@@ -1,0 +1,65 @@
+services:
+  redis:
+    image: redis:7-alpine
+    container_name: yast-redis
+    command: ["redis-server", "--appendonly", "yes"]
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    restart: unless-stopped
+
+  master:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: yast:gpu
+    container_name: yast-master
+    depends_on:
+      - redis
+    environment:
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      CUDA_VISIBLE_DEVICES: 0
+      PYTHONUNBUFFERED: 1
+    stdin_open: true
+    tty: true
+    command: ["python3.11", "main.py"]
+    volumes:
+      - ./outputs:/app/outputs
+      - ./temp:/app/temp
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+
+  worker:
+    image: yast:gpu
+    container_name: yast-worker
+    depends_on:
+      - redis
+      - master
+    environment:
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      WORKER_NAME: alice
+      CUDA_VISIBLE_DEVICES: 0
+      PYTHONUNBUFFERED: 1
+    command: ["python3.11", "worker.py"]
+    volumes:
+      - ./outputs:/app/outputs
+      - ./temp:/app/temp
+    restart: unless-stopped
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+
+volumes:
+  redis-data:

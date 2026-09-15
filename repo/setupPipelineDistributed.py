@@ -22,8 +22,10 @@ def verify_paths(config_dic):
         dataset_values['dataset_loader_path'] = os.path.join(REPO_DIR, dataset_values['dataset_loader_path']).replace('\\', os.path.sep)
 
     for model_name, model_values in config_dic['MODEL'].items():
-        model_values['model_path'] = os.path.join(REPO_DIR, model_values['model_path']).replace('\\', os.path.sep)
-        model_values['checkpoint_path'] = os.path.join(REPO_DIR, model_values['checkpoint_path']).replace('\\', os.path.sep)
+        if model_values.get('model_path'):
+            model_values['model_path'] = os.path.join(REPO_DIR, model_values['model_path']).replace('\\', os.path.sep)
+        if model_values.get('checkpoint_path'):
+            model_values['checkpoint_path'] = os.path.join(REPO_DIR, model_values['checkpoint_path']).replace('\\', os.path.sep)
 
     return config_dic
 
@@ -54,9 +56,26 @@ def main(args):
         for model_name, model_values in config_dic['MODEL'].items():
             if not model_values['run']:
                 continue
-            
-            model_values['model_path'] = os.path.join(REPO_DIR, model_values['model_path']).replace('\\', os.path.sep)
-            if not model_values['model_path'] or not os.path.exists(model_values['model_path']) or not model_values['method_name']:
+
+            checkpoint_path = model_values.get('checkpoint_path', '')
+            ext = os.path.splitext(str(checkpoint_path).lower())[1]
+            is_script_checkpoint = ext in ('.pt', '.ts', '.jit')
+
+            if is_script_checkpoint:
+                if not checkpoint_path or not os.path.exists(checkpoint_path):
+                    basename = os.path.basename(checkpoint_path)
+                    candidates = []
+                    for root, dirs, files in os.walk(REPO_DIR):
+                        if basename in files:
+                            candidates.append(os.path.join(root, basename))
+                    if candidates:
+                        model_values['checkpoint_path'] = os.path.abspath(candidates[0])
+                        checkpoint_path = model_values['checkpoint_path']
+                        print(f"Found checkpoint for model {model_name} at {checkpoint_path}; using it.")
+                    else:
+                        print("ERROR: Config file not properly configured for model " + model_name)
+                        continue
+            elif not model_values.get('model_path') or not os.path.exists(model_values['model_path']) or not model_values.get('method_name'):
                 print("ERROR: Config file not properly configured for model " + model_name)
                 continue            
 

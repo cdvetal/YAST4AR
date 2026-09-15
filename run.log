@@ -1,0 +1,2 @@
+DEBUG: Model 'BarlowTwins_Finetune_DA': model_path=None, model_path_exists=False, checkpoint_path=/home/king/Desktop/Thesis/github/repo/models/test/checkpoints/new_bt_100_finetune_alternative_da_logits_wrapper.pth, checkpoint_exists=True, ext=.pth
+Starting pipeline for dataset CIFAR10 and model BarlowTwins_Finetune_DA

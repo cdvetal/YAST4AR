@@ -111,6 +111,27 @@ It's recommended to use a virtual environment. In order to create a virtual envi
 
 **Note:** Workers must have different names.
 
+## Docker Compose
+
+You can run the master, a worker, and Redis with Docker Compose.
+
+1. Make sure Docker and Docker Compose are installed, and that GPU support is enabled on the host with the NVIDIA Container Toolkit.
+2. Build and start the stack.
+
+```bash
+    docker compose up --build
+```
+
+The Compose file starts:
+
+- `redis` as the message broker
+- `master` running `main.py`
+- `worker` running `worker.py`
+
+The image is built with the full `repo/` tree, including `repo/models/test/checkpoints`, so the checkpoints used by the project are copied into the container image.
+
+By default the worker name is `alice`. You can change it by editing `WORKER_NAME` in `docker-compose.yml`.
+
 <br/>
 
 **List of available commands:**
@@ -394,3 +415,4 @@ Clarification on the purpose of some folder and files:
 - **_pipeline.log [file]_**: log file of the pipeline.
 - **_results_by_attack.csv [file]_**: Summarizes the information of all the attacks executed (Columns: Attack name, Adversarial images correctly classified by the model)
 - **_robustness_score.csv [file]_**: File containing the robustness score given to the model.
+# Thesis-Project

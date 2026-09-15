@@ -21,13 +21,14 @@ TEMP_DIR = os.path.join(WORKING_FOLDER, 'temp')
 ATTACKS_DIR = os.path.join(REPO_DIR, 'attacks')
 MODELS_DIR = os.path.join(REPO_DIR, 'models')
 
-MASTER_IP = '127.0.0.1'
+MASTER_IP = os.environ.get('REDIS_HOST') or os.environ.get('BROKER_HOST') or '127.0.0.1'
+REDIS_PORT = os.environ.get('REDIS_PORT', '6379')
 MY_IP_ADDRESS = '127.0.0.1'
 HOSTNAME = 'worker_not_defined'
 
 
-TIMEOUT = 10000
-SOFT_TIMEOUT = 9000
+TIMEOUT = 60000
+SOFT_TIMEOUT = 50000
 MAX_RETRIES = 3
 MAX_CURRENT_TASKS = 1
 
@@ -45,7 +46,7 @@ def get_ip_address():
 
 get_ip_address()
 
-app = Celery('YASTservice', broker=f'redis://{MASTER_IP}:6379/0', backend='rpc://')
+app = Celery('YASTservice', broker=f'redis://{MASTER_IP}:{REDIS_PORT}/0', backend='rpc://')
 app.conf.task_acks_late = False
 app.conf.task_time_limit = TIMEOUT
 app.conf.task_soft_time_limit = SOFT_TIMEOUT
@@ -118,8 +119,18 @@ def execute_attack(attack_name, attack_args, folder_results):
 
     command += ' --results-path ' + folder_results
 
-    process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE)
+    process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     process.wait()
+
+    if process.returncode != 0:
+        error_output = process.stderr.read().decode('utf-8') if process.stderr else ''
+        raise RuntimeError(
+            "Attack command failed with return code {}: {}\n{}".format(
+                process.returncode,
+                command,
+                error_output,
+            )
+        )
 
 
 ##################################################################################
