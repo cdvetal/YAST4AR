@@ -1,0 +1,200 @@
+DATASET:
+    CIFAR10:
+        run: true
+        dataset_loader_path: datasets\cifar-10\datasetLoader.py
+
+    CIFAR20:
+        run: false
+        dataset_loader_path: datasets\cifar-10\datasetLoader.py
+
+MODEL:
+    DenseNet121:
+        run: false
+        model_path: models\test\DenseNet.py
+        method_name: DenseNet121
+        checkpoint_path:  models\test\checkpoints\ckpt_DenseNet121.pth
+        args: 
+
+    GoogLeNet:
+        run: false
+        model_path: models\test\GoogLeNet.py
+        method_name: GoogLeNet
+        checkpoint_path: models\test\checkpoints\ckpt_GoogLeNet.pth
+        args: 
+
+    MobileNet:
+        run: false
+        model_path: models\test\MobileNet.py
+        method_name: MobileNet
+        checkpoint_path: models\test\checkpoints\ckpt_MobileNet.pth
+        args: 
+
+    ResNet:
+        run: false
+        model_path: models\test\ResNet.py
+        method_name: ResNet18
+        checkpoint_path: models\test\checkpoints\ckpt_ResNet18.pth
+        args: 
+
+    SENet:
+        run: false
+        model_path: models\test\SENet18.py
+        method_name: SENet18
+        checkpoint_path: models\test\checkpoints\ckpt_SENet18.pth
+        args: 
+
+    VGG:
+        run: false
+        model_path: models\test\VGG.py
+        method_name: VGG
+        checkpoint_path: models\test\checkpoints\ckpt_VGG19.pth
+        args: 
+            - VGG19
+
+
+    ########### Final experiments ###########
+
+    ### EvoDENSS with adversarial ###
+    # EvoDENSS_test_adv_0:
+    #     run: true #true
+    #     model_path: 
+    #     method_name: EvoDENSS_test
+    #     checkpoint_path: models\test\checkpoints\EvoDENSS\adversarial\final_run_1_torchscript.ts
+    #     args:
+    
+    # EvoDENSS_test_adv_1:
+    #     run: true #true
+    #     model_path: 
+    #     method_name: EvoDENSS_test
+    #     checkpoint_path: models\test\checkpoints\EvoDENSS\adversarial\final_run_2_torchscript.ts
+    #     args:
+
+    # EvoDENSS_test_adv_2:
+    #     run: true #true
+    #     model_path: 
+    #     method_name: EvoDENSS_test
+    #     checkpoint_path: models\test\checkpoints\EvoDENSS\adversarial\final_run_3_torchscript.ts
+    #     args:
+    
+    # EvoDENSS_test_adv_4:
+    #     run: true #true
+    #     model_path: 
+    #     method_name: EvoDENSS_test
+    #     checkpoint_path: models\test\checkpoints\EvoDENSS\adversarial\final_run_5_torchscript.ts
+    #     args:
+    
+    # EvoDENSS_test_adv_5:
+    #     run: true #true
+    #     model_path: 
+    #     method_name: EvoDENSS_test
+    #     checkpoint_path: models\test\checkpoints\EvoDENSS\adversarial\final_run_6_torchscript.ts
+    #     args:
+    
+
+    ### EvoDENSS with clean ###
+    #     EvoDENSS_test_adv_0:
+    #     run: true #true
+    #     model_path: 
+    #     method_name: EvoDENSS_test
+    #     checkpoint_path: models\test\checkpoints\EvoDENSS\clean\run_0_torchscript.ts
+    #     args:
+    
+    # EvoDENSS_test_adv_1:
+    #     run: true #true
+    #     model_path: 
+    #     method_name: EvoDENSS_test
+    #     checkpoint_path: models\test\checkpoints\EvoDENSS\clean\run_1_torchscript.ts
+    #     args:
+
+    # EvoDENSS_test_adv_2:
+    #     run: true #true
+    #     model_path: 
+    #     method_name: EvoDENSS_test
+    #     checkpoint_path: models\test\checkpoints\EvoDENSS\clean\run_2_torchscript.ts
+    #     args:
+    
+    # EvoDENSS_test_adv_4:
+    #     run: true #true
+    #     model_path: 
+    #     method_name: EvoDENSS_test
+    #     checkpoint_path: models\test\checkpoints\EvoDENSS\clean\run_3_torchscript.ts
+    #     args:
+    
+    # EvoDENSS_test_adv_5:
+    #     run: true #true
+    #     model_path: 
+    #     method_name: EvoDENSS_test
+    #     checkpoint_path: models\test\checkpoints\EvoDENSS\clean\run_4_torchscript.ts
+    #     args:
+
+    ### 3SAT SSL ADV ###
+    3SAT_test_adv_0:
+        run: false #true
+        model_path: 
+        method_name: EvoDENSS_test
+        checkpoint_path: models\test\checkpoints\ssl_adv\seed0\model_full.pt
+        args:
+    
+    3SAT_test_adv_1:
+        run: false #true
+        model_path: 
+        method_name: EvoDENSS_test
+        checkpoint_path: models\test\checkpoints\ssl_adv\seed1\model_full.pt
+        args:
+
+    3SAT_test_adv_2:
+        run: false #true
+        model_path: 
+        method_name: EvoDENSS_test
+        checkpoint_path: models\test\checkpoints\ssl_adv\seed2\model_full.pt
+        args:
+    
+    3SAT_test_adv_4:
+        run: false #true
+        model_path: 
+        method_name: EvoDENSS_test
+        checkpoint_path: models\test\checkpoints\ssl_adv\seed3\model_full.pt
+        args:
+    
+    3SAT_test_adv_5:
+        run: true #true
+        model_path: 
+        method_name: EvoDENSS_test
+        checkpoint_path: models\test\checkpoints\ssl_adv\seed4\model_full.pt
+        args:
+    
+    ### 3SAT SUP ADV ###
+    # Sup_test_adv_0:
+    #     run: true #true
+    #     model_path: 
+    #     method_name: EvoDENSS_test
+    #     checkpoint_path: models\test\checkpoints\supervised_adv\seed0\model_full.pt
+    #     args:
+    
+    # Sup_test_adv_1:
+    #     run: true #true
+    #     model_path: 
+    #     method_name: EvoDENSS_test
+    #     checkpoint_path: models\test\checkpoints\supervised_adv\seed1\model_full.pt
+    #     args:
+
+    # Sup_test_adv_2:
+    #     run: true #true
+    #     model_path: 
+    #     method_name: EvoDENSS_test
+    #     checkpoint_path: models\test\checkpoints\supervised_adv\seed2\model_full.pt
+    #     args:
+    
+    # Sup_test_adv_4:
+    #     run: true #true
+    #     model_path: 
+    #     method_name: EvoDENSS_test
+    #     checkpoint_path: models\test\checkpoints\supervised_adv\seed3\model_full.pt
+    #     args:
+    
+    # Sup_test_adv_5:
+    #     run: true #true
+    #     model_path: 
+    #     method_name: EvoDENSS_test
+    #     checkpoint_path: models\test\checkpoints\supervised_adv\seed4\model_full.pt
+    #     args:

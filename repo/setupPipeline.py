@@ -10,6 +10,8 @@ import utils.static_vars as static
 from pipeline import Pipeline
 import utils.func_utils as utils
 
+REPO_DIR = os.path.dirname(os.path.abspath(__file__))
+
 
 def main(args):
 
@@ -25,6 +27,9 @@ def main(args):
     for dataset_name, dataset_values in config_dic['DATASET'].items():
         if not dataset_values['run']:
                 continue
+        # normalize dataset loader path relative to repo
+        if dataset_values.get('dataset_loader_path'):
+            dataset_values['dataset_loader_path'] = os.path.join(REPO_DIR, dataset_values['dataset_loader_path']).replace('\\', os.path.sep)
         if not dataset_values['dataset_loader_path'] or not os.path.exists(dataset_values['dataset_loader_path']):
             print("ERROR: Config file not properly configured for dataset " + dataset_name)
             continue
@@ -32,7 +37,37 @@ def main(args):
         for model_name, model_values in config_dic['MODEL'].items():
             if not model_values['run']:
                 continue
-            if not model_values['model_path'] or not os.path.exists(model_values['model_path']) or not model_values['method_name']:
+            # normalize model and checkpoint paths relative to repo
+            if model_values.get('model_path'):
+                model_values['model_path'] = os.path.join(REPO_DIR, model_values['model_path']).replace('\\', os.path.sep)
+            if model_values.get('checkpoint_path'):
+                model_values['checkpoint_path'] = os.path.join(REPO_DIR, model_values['checkpoint_path']).replace('\\', os.path.sep)
+
+            checkpoint_path = model_values.get('checkpoint_path', '')
+            ext = os.path.splitext(str(checkpoint_path).lower())[1]
+            is_script_checkpoint = ext in ('.pt', '.ts', '.jit')
+
+            # DEBUG: print resolved paths and existence
+            print(f"DEBUG: Model '{model_name}': model_path={model_values.get('model_path')}, model_path_exists={os.path.exists(model_values.get('model_path') or '')}, checkpoint_path={checkpoint_path}, checkpoint_exists={os.path.exists(checkpoint_path) if checkpoint_path else False}, ext={ext}")
+
+            # Scripted/serialized checkpoints can contain full serialized models (unknown architecture).
+            # In that case model_path/method_name are optional.
+            if is_script_checkpoint:
+                if not checkpoint_path or not os.path.exists(checkpoint_path):
+                    # try to find by basename
+                    basename = os.path.basename(checkpoint_path)
+                    candidates = []
+                    for root, dirs, files in os.walk(REPO_DIR):
+                        if basename in files:
+                            candidates.append(os.path.join(root, basename))
+                    if candidates:
+                        model_values['checkpoint_path'] = os.path.abspath(candidates[0])
+                        checkpoint_path = model_values['checkpoint_path']
+                        print(f"Found checkpoint for model {model_name} at {checkpoint_path}; using it.")
+                    else:
+                        print("ERROR: Config file not properly configured for model " + model_name)
+                        continue
+            elif not model_values.get('model_path') or not os.path.exists(model_values['model_path']) or not model_values.get('method_name'):
                 print("ERROR: Config file not properly configured for model " + model_name)
                 continue
             print("Starting pipeline for dataset {} and model {}".format(dataset_name, model_name))

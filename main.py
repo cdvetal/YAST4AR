@@ -30,8 +30,8 @@ TEMP_DIR = os.path.join(os.path.dirname(__file__), 'temp')
 MODELS_DIR = os.path.join(REPO_DIR, 'models')
 
 HEARTBEAT = 5
-TIMEOUT = 3600
-SOFT_TIMEOUT = 3300
+TIMEOUT = 36000
+SOFT_TIMEOUT = 33000
 MAX_RETRIES = 3
 CHUNK_SIZE = 1024*1024*32
 
@@ -52,6 +52,14 @@ signal.signal(signal.SIGINT, signal_handler)
 
 def get_ip_address():
     global IP_ADDRESS
+    broker_host = os.environ.get('REDIS_HOST') or os.environ.get('BROKER_HOST')
+    broker_port = os.environ.get('REDIS_PORT', str(PORT))
+    if broker_host:
+        IP_ADDRESS = broker_host
+        app.conf.broker_url = f'redis://{IP_ADDRESS}:{broker_port}/0'
+        print(app.conf.broker_url)
+        return
+
     try:
         fqdn = socket.getfqdn()
         IP_ADDRESS = socket.gethostbyname(fqdn)

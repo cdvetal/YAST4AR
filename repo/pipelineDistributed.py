@@ -25,8 +25,8 @@ import utils.func_utils as utils
 
 
 REPO_DIR = os.path.dirname(os.path.abspath(__file__))
-TIMEOUT = 60
-SOFT_TIMEOUT = 50
+TIMEOUT = 60000
+SOFT_TIMEOUT = 50000
 MAX_RETRIES = 3
 
 class Pipeline:
@@ -142,9 +142,17 @@ class Pipeline:
         spec.loader.exec_module(dataset)
         testloader, trainloader = dataset.dataLoader()
 
-        images, labels = utils.get_images_labels_from_dataLoader(testloader, self.device, self.total_images)
-        normalized_images = utils.normalize_image(images, dataset.MEAN, dataset.STD)
-        original_labels = self.model(normalized_images).argmax(dim=1).cpu().detach().numpy()
+        # Keep the full dataset tensor on CPU to avoid GPU OOM on large runs.
+        images, labels = utils.get_images_labels_from_dataLoader(testloader, 'cpu', self.total_images)
+        original_labels = []
+        with torch.no_grad():
+            for i in range(0, images.size(0), self.batch_size):
+                images_batch = images[i:i + self.batch_size]
+                normalized_batch = utils.normalize_image(images_batch, dataset.MEAN, dataset.STD)
+                preds = self.model(normalized_batch.to(self.device)).argmax(dim=1).cpu()
+                original_labels.append(preds)
+
+        original_labels = torch.cat(original_labels, dim=0).detach().numpy()
         print("Dataset {} loaded successfully".format(self.dataset_name))
 
         ###########################################################################################
@@ -258,13 +266,60 @@ class Pipeline:
 
         utils.save_correct_classification(self.results_path, attacks_path)
 
-        model_dataset_name, dic_results, perfect_score, num_misclassified_images = utils.calculate_robustness_score(self.results_path, attacks_path)
+        (
+            model_dataset_name,
+            dic_results,
+            perfect_score,
+            num_misclassified_images,
+            clean_acc_by_attack,
+            robust_acc_by_attack,
+            linf_avg_by_attack,
+            l2_avg_by_attack,
+            queries_avg_by_attack,
+            clean_acc_str_by_attack,
+            robust_acc_str_by_attack,
+            linf_str_by_attack,
+            l2_str_by_attack,
+            queries_str_by_attack,
+        ) = utils.calculate_robustness_score(self.results_path, attacks_path)
 
         # update global log
-        utils.update_log_robustness(model_dataset_name, dic_results, num_misclassified_images, perfect_score, REPO_DIR)
+        utils.update_log_robustness(
+            model_dataset_name,
+            dic_results,
+            num_misclassified_images,
+            perfect_score,
+            REPO_DIR,
+            clean_acc_by_attack,
+            robust_acc_by_attack,
+            linf_avg_by_attack,
+            l2_avg_by_attack,
+            queries_avg_by_attack,
+            clean_acc_str_by_attack,
+            robust_acc_str_by_attack,
+            linf_str_by_attack,
+            l2_str_by_attack,
+            queries_str_by_attack,
+        )
 
         # update user log
-        utils.update_log_robustness(model_dataset_name, dic_results, num_misclassified_images, perfect_score, os.path.abspath(self.results_path))
+        utils.update_log_robustness(
+            model_dataset_name,
+            dic_results,
+            num_misclassified_images,
+            perfect_score,
+            os.path.abspath(self.results_path),
+            clean_acc_by_attack,
+            robust_acc_by_attack,
+            linf_avg_by_attack,
+            l2_avg_by_attack,
+            queries_avg_by_attack,
+            clean_acc_str_by_attack,
+            robust_acc_str_by_attack,
+            linf_str_by_attack,
+            l2_str_by_attack,
+            queries_str_by_attack,
+        )
 
         # delete bin file
         if os.path.exists(model_path):

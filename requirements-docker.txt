@@ -1,0 +1,14 @@
+celery[redis]
+dill
+matplotlib
+numpy
+openpyxl
+opencv-python-headless
+pandas
+Pillow
+PyYAML
+requests
+scipy
+tqdm
+torch==2.5.1+cu124
+torchvision==0.20.1+cu124
